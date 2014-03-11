@@ -4,14 +4,14 @@ $(document).ready(function() {
   var tottPoints = 53
   var remainingGames = 10
   var origRemainingGames = remainingGames
-  var maxPoints = remainingGames * 3
+  var maxPoints = arsePoints * 3
   var invalidPoints = maxPoints - 1
   var arseFix = ['Tottenham','Chelsea','Swansea','Man City','Everton','West Ham','Hull','Newcastle','West Brom','Norwich'];
-  var tottFix = ['Chelsea','Arsenal','Southampton','Liverpool','Sunderland','West Brom','Fulham','Stoke','West Ham','Aston Villa'];
+  var tottFix = ['Arsenal','Southampton','Liverpool','Sunderland','West Brom','Fulham','Stoke','West Ham','Aston Villa'];
   var a = 'away';
   var h = 'home';
   var arseLoc =  [a,a,h,h,a,h,a,h,h,a];
-  var tottLoc =  [a,h,h,a,h,a,h,a,a,h];
+  var tottLoc =  [h,h,a,h,a,h,a,a,h];
   var opt = '<option value="3">Win</option><option value="1">Draw</option><option value="0">Lose</option>'
   var arseRemainGames = arseFix.length;
   var tottRemainGames = tottFix.length;
@@ -45,13 +45,12 @@ $(document).ready(function() {
   function tottBehind() {
 
     var j = tottRemainGames ;
-	alert(j);
 	var x = tottMaxPoints;
 	var z = arsePoints;
 	while (x > z || j == 0) {       
 	  x = (j * 3) + tottPoints;
 	  j--;
-	  var i = remainingGames - j;
+	  var i = arseRemainGames - j;
 	  $('#text').html('At least '+i+' games. If Arsenal and Tottenham win all their games.');
     }	
   }; // end tottBehind
@@ -63,23 +62,20 @@ $(document).ready(function() {
 	) {
 	  i = i + 1
 	}    
-	$('.pToWin').html(i+' points to win if Totts and Arsenal win all their games.');
+	j = Math.round(i / 3); // find number of wins
+	x = i - (j * 3) ; // finds number of draws	
+	var s = '';
+	if ( x <= 1)
+	  { s = ''
+	} else { s = 's' }
+	$('.pToWin').html('Arsenal need '+i+' more points if Totts win all their games.'+j+' wins and '+ x +' draw'+s+' should do it.');
+
   } // end pointsToWin
   
     $('.arse').html(arseMaxPoints+' Arsenals Max Possible Points');
 	$('.tott').html(tottMaxPoints+' Tottenham Max Possible Points');
 	$('.tott').html(tottMaxPoints+' Tottenham Max Possible Points');
 	
-  function leastPossWin() {
-    var i = (arseMaxPoints - tottMaxPoints);
-    j = arseMaxPoints + i;
-    if (
-	  j == invalidPoints
-	) {
-	  i = i + 1
-	} 
-	$('.leastWin').html('Arsenal need at least '+i+' points if Tottenham win all there games.');
-  }  // end leastPointsWin
   
   function pointsDiff() {
     var outcome = '' 
@@ -96,6 +92,8 @@ $(document).ready(function() {
 	var p = $('.pAhead').html('Arsenal are '+ i + ' point(s) ' + outcome + '.')
   } // end pointsDiff
 
+  $('.arsenal').prop('disabled','disabled');
+  
   $('.tottenham').blur(function() { // sets totts vs arse option box //
     var i = parseInt($('.tottenham').val(),10);	
 	if ( i == 3 ) {
@@ -144,9 +142,9 @@ $(document).ready(function() {
 	  $('.points2').html(arseTotal);
 	}
 	
-    var j = remainingGames;
+/*     var j = remainingGames;
 	var x = tottMaxPoints;
-	var z = arsePoints;
+	var z = arsePoints; */
 
   } // end prediction
   
@@ -163,7 +161,6 @@ $(document).ready(function() {
       { 
 	    tottBehind(); 
 		pointsToWin();
-		leastPossWin()
     } else if (
 	   arsePoints == tottPoints
 	) {
